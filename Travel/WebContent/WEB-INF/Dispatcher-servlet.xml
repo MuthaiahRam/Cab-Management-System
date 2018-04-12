@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jee="http://www.springframework.org/schema/jee"
+	xmlns:lang="http://www.springframework.org/schema/lang"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee.xsd
+		http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+   <mvc:annotation-driven />
+
+
+	<context:component-scan base-package="com.wipro.ata.*" />
+	<tx:annotation-driven transaction-manager="hibernateTransactionManager"/>
+	<bean
+		class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping" />
+		
+<bean id="viewResolver1" class="org.springframework.web.servlet.view.ResourceBundleViewResolver">
+        <property name="order" value="1"/>
+        <property name="basename" value="views"/>
+    </bean>
+	
+	
+	<bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="order">
+			<value>2</value>
+		</property>
+		<property name="prefix">
+			<value>/WEB-INF/view/</value>
+		</property>
+		<property name="suffix">
+			<value>.jsp</value>
+		</property>
+	</bean>
+	
+	<bean id="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="oracle.jdbc.OracleDriver" />
+		<property name="url" value="jdbc:oracle:thin:@localhost:1521:xe" />
+		<property name="username" value="travel" />
+		<property name="password" value="travel" />
+	</bean>
+	<bean id="sessionfactory"
+		class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="annotatedClasses">
+			<list>
+				<value>com.wipro.ata.bean.DriverBean</value>
+				<value>com.wipro.ata.bean.CredentialsBean</value>
+				<value>com.wipro.ata.bean.ProfileBean</value>
+				<value>com.wipro.ata.bean.ReservationBean</value>
+				<value>com.wipro.ata.bean.RouteBean</value>
+				<value>com.wipro.ata.bean.VehicleBean</value>
+				<value>com.wipro.ata.bean.WrapperList</value>
+				
+			</list>
+		</property>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">org.hibernate.dialect.Oracle10gDialect</prop>
+				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.hbm2ddl.auto">update</prop>
+			</props>
+		</property>
+	</bean>
+	
+   
+     <bean id="hibernateTransactionManager"
+		class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionfactory" />
+	</bean>
+
+<bean id="bookVehicleValidator" class="com.xyz.ata.validator.BookVehicleValidator" />
+     <bean id="registerValidator" class="com.xyz.ata.validator.RegisterValidator" />
+     <bean id="addDriverValidator" class="com.xyz.ata.validator.AddDriverValidator" />
+     <bean id="addRouteValidator" class="com.xyz.ata.validator.AddRouteValidator" />
+	 <bean id="addVehicleValidator" class="com.xyz.ata.validator.AddVehicleValidator" />
+	  <bean id="modifyVehicleValidator" class="com.xyz.ata.validator.ModifyVehicleValidator" />
+   <bean id="modifyDriverValidator" class="com.xyz.ata.validator.ModifyDriverValidator" />
+     <bean id="modifyRouteValidator" class="com.xyz.ata.validator.ModifyRouteValidator" />
+ </beans>
